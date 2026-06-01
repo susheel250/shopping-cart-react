@@ -1,4 +1,5 @@
 .navbar {
+
   width: 100%;
 
   display: flex;
@@ -12,9 +13,13 @@
   background: #0d6efd;
 
   color: white;
+
+  box-sizing: border-box;
+
 }
 
 .logo a {
+
   color: white;
 
   text-decoration: none;
@@ -22,37 +27,47 @@
   font-size: 24px;
 
   font-weight: bold;
+
 }
 
 .nav-links {
+
   display: flex;
 
   gap: 25px;
+
 }
 
 .nav-links a {
+
   color: white;
 
   text-decoration: none;
 
   font-weight: 500;
+
 }
 
 .auth-links {
+
   display: flex;
 
   gap: 15px;
 
   align-items: center;
+
 }
 
 .auth-links a {
+
   color: white;
 
   text-decoration: none;
+
 }
 
 .register-btn {
+
   background: white;
 
   color: #0d6efd !important;
@@ -62,9 +77,60 @@
   border-radius: 6px;
 
   font-weight: 600;
+
+}
+
+.logout-btn {
+
+  background: #dc3545;
+
+  color: white;
+
+  border: none;
+
+  padding: 8px 15px;
+
+  border-radius: 6px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+}
+
+.logout-btn:hover {
+
+  opacity: 0.9;
+
 }
 
 .nav-links a:hover,
 .auth-links a:hover {
+
   opacity: 0.8;
+
+}
+
+@media (max-width: 768px) {
+
+  .navbar {
+
+    flex-direction: column;
+
+    gap: 15px;
+
+    padding: 20px;
+
+  }
+
+  .nav-links {
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+  }
+
 }
