@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { addToCart } from "../services/cartService";
 import { toast } from "react-toastify";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 import "./Products.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const { cartCount, setCartCount } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -28,6 +30,12 @@ function Products() {
   }, []);
 
   const handleAddToCart = async (productId) => {
+    const token = localStorage.getItem("token");   
+    if (!token) {
+      toast.error("Please login to add products to cart");
+      navigate("/login");
+      return;
+    }
       try {
         await addToCart(productId);
 

@@ -12,10 +12,14 @@ import { toast } from "react-toastify";
 
 import { useCart } from "../context/CartContext";
 
+import { useNavigate } from "react-router-dom";
+
 function ProductDetail() {
   const { id } = useParams();
 
   const { cartCount, setCartCount } = useCart();
+
+  const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
 
@@ -38,6 +42,12 @@ function ProductDetail() {
   }
 
   const handleAddToCart = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to add products to cart");
+      navigate("/login");
+      return;
+    }
     try {
       await addToCart(product.id);
       setCartCount(cartCount + 1);
