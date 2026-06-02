@@ -51,6 +51,7 @@ function Navbar() {
       <div className="nav-links">
 
         <Link to="/products">Products</Link>
+        <Link to="/address">Addresses</Link>
 
         {token && (
           <>
