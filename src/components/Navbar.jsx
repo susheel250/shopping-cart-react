@@ -2,12 +2,36 @@ import { Link, useNavigate } from "react-router-dom";
 
 import "./Navbar.css";
 
+import { useEffect, useState } from "react";
+
+import { getCartCount } from "../services/cartService";
+
+import { useCart } from "../context/CartContext";
+
+import { FaShoppingCart } from "react-icons/fa";
+
 function Navbar() {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
 
   const name = localStorage.getItem("name");
+
+  const { cartCount, setCartCount } = useCart();
+
+  useEffect(() => {
+    const fetchCartCount = async () => {
+      try {
+        const response = await getCartCount();
+
+        setCartCount(response);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCartCount();
+  }, [token]);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -30,7 +54,11 @@ function Navbar() {
 
         {token && (
           <>
-            <Link to="/cart">Cart</Link>
+            <Link to="/cart" className="cart-link">
+              <FaShoppingCart />
+
+              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+            </Link>
 
             <Link to="/orders">Orders</Link>
           </>

@@ -91,3 +91,48 @@
 .product-content button:hover {
   background: #0b5ed7;
 }
+
+
+.product-actions {
+
+  display: flex;
+
+  gap: 10px;
+
+  margin-top: 15px;
+
+}
+
+.view-btn {
+
+  flex: 1;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  background: #0d6efd;
+
+  color: white;
+
+  padding: 10px;
+
+  border-radius: 8px;
+
+}
+
+.cart-btn {
+
+  flex: 1;
+
+  border: none;
+
+  background: #198754;
+
+  color: white;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+
+}

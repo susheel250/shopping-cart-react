@@ -6,8 +6,16 @@ import api from "../services/api";
 
 import "./ProductDetail.css";
 
+import { addToCart } from "../services/cartService";
+
+import { toast } from "react-toastify";
+
+import { useCart } from "../context/CartContext";
+
 function ProductDetail() {
   const { id } = useParams();
+
+  const { cartCount, setCartCount } = useCart();
 
   const [product, setProduct] = useState(null);
 
@@ -28,6 +36,22 @@ function ProductDetail() {
   if (!product) {
     return <h2>Loading...</h2>;
   }
+
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product.id);
+      setCartCount(cartCount + 1);
+      toast.success("Product added to cart!");
+    } catch (error) {
+      console.log(error);
+
+      toast.error(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          "Failed to add product to cart",
+      );
+    }
+  };
 
   return (
     <div className="product-detail">
@@ -54,7 +78,9 @@ function ProductDetail() {
         </div>
 
         <div className="action-buttons">
-          <button className="add-cart-btn">Add To Cart</button>
+          <button className="add-cart-btn" onClick={handleAddToCart}>
+            Add To Cart
+          </button>
 
           {/* <button className="buy-now-btn">Buy Now</button> */}
         </div>
