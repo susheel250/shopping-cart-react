@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getCartItems, removeCartItem } from "../services/cartService";
+import { getCartItems, removeCartItem,getCartCount } from "../services/cartService";
 
 import { useCart } from "../context/CartContext";
 
@@ -44,7 +44,8 @@ function Cart() {
     try {
       await removeCartItem(itemId);
       fetchCartItems(); // Refresh the cart items after removal
-        setCartCount(cartCount - 1); // Decrease cart count by 1
+      const cartCount = await getCartCount(); // Get the updated cart count
+      setCartCount(cartCount); // Update the cart count
     } catch (error) {
       console.log("Error removing cart item:", error);
     }

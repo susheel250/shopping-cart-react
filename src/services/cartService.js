@@ -16,7 +16,7 @@ export const addToCart = async (productId, quantity = 1) => {
 
 export const getCartCount = async () => {
   const token = localStorage.getItem("token");
-
+  if(!token) return 0;
   try {
     const response = await api.get("/cart/count", {
       headers: {

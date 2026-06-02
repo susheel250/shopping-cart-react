@@ -35,7 +35,8 @@ function Navbar() {
 
   const logout = () => {
     localStorage.removeItem("token");
-
+    localStorage.removeItem("name");
+    setCartCount(0);
     navigate("/login");
 
     window.location.reload();
@@ -48,7 +49,6 @@ function Navbar() {
       </div>
 
       <div className="nav-links">
-        <Link to="/">Home</Link>
 
         <Link to="/products">Products</Link>
 
