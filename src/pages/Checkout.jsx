@@ -70,9 +70,7 @@ function Checkout() {
 
       // Create Order
       const orderResponse = await createOrder();
-      console.log(orderResponse.data);
       const orderId = orderResponse.data.order.id;
-      console.log("Order ID:", orderId);
       // Create Stripe Session
       const sessionResponse = await createCheckoutSession(orderId);
 
