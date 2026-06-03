@@ -11,6 +11,7 @@ import PaymentSuccess from "../pages/PaymentSuccess";
 import PaymentCancel from "../pages/PaymentCancel";
 import Orders from "../pages/Orders";
 import OrderDetails from "../pages/OrderDetails";
+import Profile from "../pages/Profile";
 
 function AppRoutes() {
   return (
@@ -32,6 +33,7 @@ function AppRoutes() {
       <Route path="/payment/success" element={<PaymentSuccess />} />
       <Route path="/payment/cancel" element={<PaymentCancel />} />
       <Route path="/orders/:id" element={<OrderDetails />} />
+      <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

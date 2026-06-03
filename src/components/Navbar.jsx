@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 
 import "./Navbar.css";
 
@@ -48,23 +48,53 @@ function Navbar() {
         <Link to="/">Shopping Cart</Link>
       </div>
 
-      <div className="nav-links">
+     <div className="nav-links">
+  {token && (
+    <>
+      <NavLink
+        to="/address"
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+      >
+        Addresses
+      </NavLink>
 
-        <Link to="/products">Products</Link>
-        <Link to="/address">Addresses</Link>
+      <NavLink
+        to="/cart"
+        className={({ isActive }) =>
+          isActive ? "nav-link active cart-link" : "nav-link cart-link"
+        }
+      >
+        <FaShoppingCart />
 
-        {token && (
-          <>
-            <Link to="/cart" className="cart-link">
-              <FaShoppingCart />
-
-              {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
-            </Link>
-
-            <Link to="/orders">Orders</Link>
-          </>
+        {cartCount > 0 && (
+          <span className="cart-badge">
+            {cartCount}
+          </span>
         )}
-      </div>
+      </NavLink>
+
+      <NavLink
+        to="/orders"
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+      >
+        Orders
+      </NavLink>
+
+      <NavLink
+        to="/profile"
+        className={({ isActive }) =>
+          isActive ? "nav-link active" : "nav-link"
+        }
+      >
+        Profile
+      </NavLink>
+    </>
+  )}
+</div>
 
       <div className="auth-links">
         {token ? (
