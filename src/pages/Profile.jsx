@@ -99,7 +99,7 @@ function Profile() {
     } catch (error) {
       console.log(error);
 
-      toast.error("Failed to change password");
+      toast.error(error.response?.data?.error || "Failed to change password");
     }
   };
 
