@@ -74,6 +74,31 @@ function Cart() {
       console.log(error);
     }
   };
+
+  const handleCheckout =
+  () => {
+
+    if (
+      !defaultAddress
+    ) {
+
+      toast.error(
+        "Please add an address first"
+      );
+
+      navigate(
+        "/address"
+      );
+
+      return;
+
+    }
+
+    navigate(
+      "/checkout"
+    );
+
+  };
   return (
     <div className="cart-container">
       <h1 className="cart-title">Shopping Cart</h1>
@@ -158,7 +183,16 @@ function Cart() {
               Change Address
             </button>
 
-            <button className="checkout-btn">Proceed To Checkout</button>
+            <button
+  className="checkout-btn"
+  onClick={
+    handleCheckout
+  }
+>
+
+  Proceed To Checkout
+
+</button>
           </div>
         </div>
       )}
