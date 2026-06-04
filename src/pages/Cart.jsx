@@ -4,6 +4,7 @@ import {
   getCartItems,
   removeCartItem,
   getCartCount,
+  updateQuantity,
 } from "../services/cartService";
 
 import { useCart } from "../context/CartContext";
@@ -52,6 +53,21 @@ function Cart() {
     fetchDefaultAddress();
   }, []);
 
+  const handleQuantityChange = async (itemId, quantity) => {
+    try {
+      await updateQuantity(itemId, quantity);
+
+      fetchCartItems();
+
+      const count = await getCartCount();
+
+      setCartCount(count);
+    } catch (error) {
+      console.log(error);
+
+      toast.error("Failed to update quantity");
+    }
+  };
   const handleRemove = async (itemId) => {
     try {
       await removeCartItem(itemId);
@@ -124,10 +140,26 @@ function Cart() {
 
                   <p className="price">₹ {item.product.price}</p>
 
-                  <p>
-                    Quantity:
-                    {item.quantity}
-                  </p>
+                  <div className="quantity-controls">
+                    <button
+                      disabled={item.quantity === 1}
+                      onClick={() =>
+                        handleQuantityChange(item.id, item.quantity - 1)
+                      }
+                    >
+                      -
+                    </button>
+
+                    <span>{item.quantity}</span>
+
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.id, item.quantity + 1)
+                      }
+                    >
+                      +
+                    </button>
+                  </div>
 
                   <p className="subtotal">
                     Subtotal: ₹ {item.product.price * item.quantity}
@@ -183,16 +215,9 @@ function Cart() {
               Change Address
             </button>
 
-            <button
-  className="checkout-btn"
-  onClick={
-    handleCheckout
-  }
->
-
-  Proceed To Checkout
-
-</button>
+            <button className="checkout-btn" onClick={handleCheckout}>
+              Proceed To Checkout
+            </button>
           </div>
         </div>
       )}

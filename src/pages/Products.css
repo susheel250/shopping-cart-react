@@ -139,17 +139,21 @@
 
 .products-toolbar {
 
+  position: sticky;
+
+  top: 60px;
+
+  z-index: 100;
+
+  background: white;
+
+  padding: 15px 0;
+
   display: flex;
-
-  justify-content: space-between;
-
-  align-items: center;
 
   gap: 15px;
 
-  margin-bottom: 25px;
-
-  flex-wrap: wrap;
+  margin-bottom: 20px;
 
 }
 

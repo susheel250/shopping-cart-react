@@ -16,7 +16,7 @@ export const addToCart = async (productId, quantity = 1) => {
 
 export const getCartCount = async () => {
   const token = localStorage.getItem("token");
-  if(!token) return 0;
+  if (!token) return 0;
   try {
     const response = await api.get("/cart/count", {
       headers: {
@@ -60,4 +60,22 @@ export const removeCartItem = async (itemId) => {
   } catch (error) {
     console.log("Error removing cart item:", error);
   }
+};
+
+export const updateQuantity = async (cartItemId, quantity) => {
+  const token = localStorage.getItem("token");
+
+  return await api.put(
+    `/cart/update-quantity/${cartItemId}`,
+
+    {
+      quantity,
+    },
+
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
 };
