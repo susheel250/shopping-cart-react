@@ -215,3 +215,40 @@
   }
 
 }
+
+.address-select {
+
+  width: 100%;
+
+  padding: 12px;
+
+  border: 1px solid #ddd;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  font-family: inherit;
+
+  background: white;
+
+  outline: none;
+
+  transition: 0.3s;
+
+}
+
+.address-select:focus {
+
+  border-color: #0d6efd;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(
+      13,
+      110,
+      253,
+      0.15
+    );
+
+}
