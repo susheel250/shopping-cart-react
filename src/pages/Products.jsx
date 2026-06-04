@@ -5,6 +5,7 @@ import { addToCart } from "../services/cartService";
 import { toast } from "react-toastify";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import { getProducts } from "../services/productService";
 
 import "./Products.css";
 
@@ -13,10 +14,19 @@ function Products() {
   const { cartCount, setCartCount } = useCart();
   const navigate = useNavigate();
 
+  const [search, setSearch] =
+  useState("");
+
+  const [categories, setCategories] =
+  useState([]); 
+
+  const [categoryId, setCategoryId] =
+  useState("");
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await api.get("/products/list");
+        const response = await getProducts(search, categoryId);
 
         setProducts(response.data);
       } catch (error) {
@@ -27,7 +37,27 @@ function Products() {
     
 
     fetchProducts();
-  }, []);
+  }, [search, categoryId]);
+
+  const fetchCategories =
+  async () => {
+
+    const response =
+      await api.get(
+        "/categories/list"
+      );
+
+    setCategories(
+      response.data
+    );
+
+  };
+
+useEffect(() => {
+
+  fetchCategories();
+
+}, []);
 
   const handleAddToCart = async (productId) => {
     const token = localStorage.getItem("token");   
@@ -53,6 +83,25 @@ function Products() {
     <div className="products-page">
       <h1>Our Products</h1>
 
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+
+      <select
+        value={categoryId}
+        onChange={(e) => setCategoryId(e.target.value)}
+      >
+        <option value="">All Categories</option>
+
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+      </select>
       <div className="products-grid">
         {products.map((product) => (
           <div className="product-card" key={product.id}>
