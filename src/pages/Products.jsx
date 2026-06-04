@@ -22,13 +22,19 @@ function Products() {
 
   const [categoryId, setCategoryId] =
   useState("");
+
+  const [page, setPage] = useState(1);
+
+  const [totalPages, setTotalPages] = useState(1);
   
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getProducts(search, categoryId);
+        const response = await getProducts(search, categoryId, page);
 
-        setProducts(response.data);
+        setProducts(response.data.products);
+
+        setTotalPages(response.data.totalPages);
       } catch (error) {
         console.log(error);
       }
@@ -37,7 +43,7 @@ function Products() {
     
 
     fetchProducts();
-  }, [search, categoryId]);
+  }, [search, categoryId, page]);
 
   const fetchCategories =
   async () => {
@@ -83,25 +89,36 @@ useEffect(() => {
     <div className="products-page">
       <h1>Our Products</h1>
 
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      <div className="products-toolbar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="🔍 Search products..."
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+        />
 
-      <select
-        value={categoryId}
-        onChange={(e) => setCategoryId(e.target.value)}
-      >
-        <option value="">All Categories</option>
+        <select
+          className="category-select"
+          value={categoryId}
+          onChange={(e) => {
+            setCategoryId(e.target.value);
+            setPage(1);
+          }}
+        >
+          <option value="">All Categories</option>
 
-        {categories.map((category) => (
-          <option key={category.id} value={category.id}>
-            {category.name}
-          </option>
-        ))}
-      </select>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <br />
       <div className="products-grid">
         {products.map((product) => (
           <div className="product-card" key={product.id}>
@@ -134,6 +151,28 @@ useEffect(() => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="pagination">
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Previous
+        </button>
+
+        {[...Array(totalPages)].map((_, index) => (
+          <button
+            key={index}
+            className={page === index + 1 ? "active-page" : ""}
+            onClick={() => setPage(index + 1)}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </div>
   );
