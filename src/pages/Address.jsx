@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import "./Address.css";
 
 import { State, City } from "country-state-city";
+import Loader from "../components/Loader";
 
 function Address() {
 
@@ -22,6 +23,8 @@ function Address() {
     : [];
   const [addresses, setAddresses] =
     useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] =
     useState({
@@ -44,7 +47,7 @@ function Address() {
     async () => {
 
       try {
-
+        setLoading(true);
         const response =
           await getAddresses();
 
@@ -56,6 +59,8 @@ function Address() {
 
         console.log(error);
 
+      }finally {
+        setLoading(false);
       }
 
     };
@@ -149,6 +154,10 @@ function Address() {
       }
 
     };
+
+    if (loading) {
+        return <Loader />;
+    }
 
   return (
     <div className="address-container">

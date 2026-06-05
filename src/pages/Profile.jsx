@@ -8,8 +8,12 @@ import {
 } from "../services/authService";
 
 import "./Profile.css";
+import Loader from "../components/Loader";
 
 function Profile() {
+
+  const [loading, setLoading] = useState(false);
+
   const [profile, setProfile] = useState({
     name: "",
     email: "",
@@ -24,6 +28,7 @@ function Profile() {
 
   const fetchProfile = async () => {
     try {
+      setLoading(true);
       const response = await getProfile();
 
       setProfile(response.data);
@@ -31,6 +36,8 @@ function Profile() {
       console.log(error);
 
       toast.error("Failed to load profile");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -102,6 +109,10 @@ function Profile() {
       toast.error(error.response?.data?.error || "Failed to change password");
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="profile-container">

@@ -12,6 +12,7 @@ import {
 } from "../services/orderService";
 
 import "./OrderDetails.css";
+import Loader from "../components/Loader";
 
 function OrderDetails() {
   const { id } =
@@ -19,10 +20,12 @@ function OrderDetails() {
 
   const [order, setOrder] =
     useState(null);
+    const [loading, setLoading] =  useState(true);
 
   const fetchOrder =
     async () => {
       try {
+        setLoading(true);
         const response =
           await getOrderById(id);
 
@@ -31,6 +34,8 @@ function OrderDetails() {
         );
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -38,8 +43,9 @@ function OrderDetails() {
     fetchOrder();
   }, []);
 
-  if (!order)
-    return <p>Loading...</p>;
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="order-details">

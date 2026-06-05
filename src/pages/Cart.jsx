@@ -15,6 +15,7 @@ import { getAddresses } from "../services/addressService";
 import { useNavigate } from "react-router-dom";
 
 import "./Cart.css";
+import Loader from "../components/Loader";
 
 function Cart() {
   const { cartCount, setCartCount } = useCart();
@@ -25,6 +26,9 @@ function Cart() {
   const [total, setTotal] = useState(0);
 
   const [defaultAddress, setDefaultAddress] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
 
   const calculateTotal = (items) => {
     let amount = 0;
@@ -38,6 +42,7 @@ function Cart() {
 
   const fetchCartItems = async () => {
     try {
+      setLoading(true);
       const response = await getCartItems();
 
       setCartItems(response.data);
@@ -45,6 +50,8 @@ function Cart() {
       calculateTotal(response.data);
     } catch (error) {
       console.log(error);
+    }finally {
+     setLoading(false);
     }
   };
 
@@ -54,20 +61,28 @@ function Cart() {
   }, []);
 
   const handleQuantityChange = async (itemId, quantity) => {
-    try {
-      await updateQuantity(itemId, quantity);
+  try {
+    setUpdating(true);
 
-      fetchCartItems();
+    await updateQuantity(itemId, quantity);
 
-      const count = await getCartCount();
+    const updatedItems = cartItems.map((item) =>
+      item.id === itemId
+        ? { ...item, quantity }
+        : item
+    );
 
-      setCartCount(count);
-    } catch (error) {
-      console.log(error);
+    setCartItems(updatedItems);
+    calculateTotal(updatedItems);
 
-      toast.error("Failed to update quantity");
-    }
-  };
+    const count = await getCartCount();
+    setCartCount(count);
+  } catch (error) {
+    toast.error("Failed to update quantity");
+  } finally {
+    setUpdating(false);
+  }
+};
   const handleRemove = async (itemId) => {
     try {
       await removeCartItem(itemId);
@@ -115,11 +130,14 @@ function Cart() {
     );
 
   };
+  if (loading) {
+    return <Loader />;
+  }
   return (
     <div className="cart-container">
       <h1 className="cart-title">Shopping Cart</h1>
 
-      {cartItems.length === 0 ? (
+      {!cartItems || cartItems.length === 0 ? (
         <div className="empty-cart">
           <h2>Your cart is empty 🛒</h2>
 

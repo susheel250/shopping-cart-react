@@ -2,24 +2,33 @@ import { useEffect, useState } from "react";
 import { getMyOrders } from "../services/orderService";
 import { Link } from "react-router-dom";
 import "./Orders.css";
+import Loader from "../components/Loader";
 
 function Orders() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchOrders = async () => {
     try {
+      setLoading(true);
       const response = await getMyOrders();
 
       // Adjust if your API returns { orders: [...] }
       setOrders(response.data);
     } catch (error) {
       console.log(error);
+    }finally{   
+    setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="orders-container">

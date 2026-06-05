@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { getProducts } from "../services/productService";
 
 import "./Products.css";
+import Loader from "../components/Loader";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -26,10 +27,13 @@ function Products() {
   const [page, setPage] = useState(1);
 
   const [totalPages, setTotalPages] = useState(1);
+
+  const [loading, setLoading] = useState(false);
   
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        setLoading(true);
         const response = await getProducts(search, categoryId, page);
 
         setProducts(response.data.products);
@@ -38,6 +42,9 @@ function Products() {
       } catch (error) {
         console.log(error);
       }
+      finally {
+      setLoading(false);
+    }
     };
 
     
@@ -85,6 +92,9 @@ useEffect(() => {
       }
     };
 
+    if (loading) {
+      return <Loader />;
+    }
   return (
     <div className="products-page">
       <div className="products-toolbar">
