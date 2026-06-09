@@ -250,3 +250,18 @@
   background: #198754 !important;
 
 }
+
+
+.no-products {
+  width: 100%;
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.no-products h3 {
+  margin-bottom: 10px;
+}
+
+.no-products p {
+  color: #666;
+}

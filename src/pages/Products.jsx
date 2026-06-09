@@ -29,12 +29,28 @@ function Products() {
   const [totalPages, setTotalPages] = useState(1);
 
   const [loading, setLoading] = useState(false);
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+
+  const timer =
+    setTimeout(() => {
+
+      setDebouncedSearch(search);
+
+    }, 500);
+
+  return () =>
+    clearTimeout(timer);
+
+}, [search]);
   
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await getProducts(search, categoryId, page);
+        console.log(search, categoryId, page);
+        const response = await getProducts(debouncedSearch, categoryId, page);
 
         setProducts(response.data.products);
 
@@ -50,7 +66,7 @@ function Products() {
     
 
     fetchProducts();
-  }, [search, categoryId, page]);
+ }, [debouncedSearch, categoryId, page]);
 
   const fetchCategories =
   async () => {
@@ -128,37 +144,44 @@ useEffect(() => {
       </div>
       <br />
       <div className="products-grid">
-        {products.map((product) => (
-          <div className="product-card" key={product.id}>
-            <Link to={`/products/${product.id}`}>
-              <img
-                src={`http://localhost:5000/uploads/${product.image}`}
-                alt={product.name}
-              />
-            </Link>
+        {products.length === 0 ? (
+          <div className="no-products">
+            <h3>No products found</h3>
+            <p>Try changing your search or category filter.</p>
+          </div>
+        ) : (
+          products.map((product) => (
+            <div className="product-card" key={product.id}>
+              <Link to={`/products/${product.id}`}>
+                <img
+                  src={`http://localhost:5000/uploads/${product.image}`}
+                  alt={product.name}
+                />
+              </Link>
 
-            <div className="product-content">
-              <h2>{product.name}</h2>
+              <div className="product-content">
+                <h2>{product.name}</h2>
 
-              <p className="price">₹ {product.price}</p>
+                <p className="price">₹ {product.price}</p>
 
-              <p className="description">{product.description}</p>
+                <p className="description">{product.description}</p>
 
-              <div className="product-actions">
-                <Link to={`/products/${product.id}`} className="view-btn">
-                  View Details
-                </Link>
+                <div className="product-actions">
+                  <Link to={`/products/${product.id}`} className="view-btn">
+                    View Details
+                  </Link>
 
-                <button
-                  className="cart-btn"
-                  onClick={() => handleAddToCart(product.id)}
-                >
-                  Add To Cart
-                </button>
+                  <button
+                    className="cart-btn"
+                    onClick={() => handleAddToCart(product.id)}
+                  >
+                    Add To Cart
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <div className="pagination">
         <button disabled={page === 1} onClick={() => setPage(page - 1)}>
